@@ -30,7 +30,8 @@ STEP09:plot_time_series  (v.1.0.0) \
 STEP10:monthly_avg  (v.1.0.1) \
 STEP11:vertical_timeseries_analysis  (v 0.0.0) 
 > Use the previous analysis for now (vertical_analysis_PBO.out) \
-> Update later (10/28/2021) \
+> Update later (10/28/2021) 
+
 STEP12:diff  (v.1.0.0) \
 STEP13:fnl  (v.1.0.0) \
 
