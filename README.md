@@ -15,8 +15,10 @@ Nov 02, 2021
 >    To know the month and year of a displacement field (a `*.fnl` file), check the output file **`displacement_time_label.dat`** 
 >>    The element in the *th row of **`displacement_time_label.dat`** file is the month and year for a `*.fnl` file.
 
+\
+\
 
-#### *steps* 
+#### *STEPS* 
 \
 STEP01:download_files  (v.1.0.1) \
 STEP02:preprocess_data  (v.1.0.2) \
