@@ -3,8 +3,8 @@
 `jeonghyeop Kim` (jeonghyeop.kim@gmail.com) \
 Nov 02, 2021
 
-## In quantifying nontectonic horizontal strain field, one needs to download and preprocess NOTA GNSS data first.
-### The preprocessed displacement fields are saved in `data/processing/*.fnl` 
+## These codes download and preprocess GNSS position timeseries data to generate 4-month displacement fields.
+### The displacement fields are saved in `data/processing/*.fnl` 
 
 ### HOW TO USE this repository 
 
