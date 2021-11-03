@@ -6,9 +6,11 @@
 
 #step 1: download GNSS data
 ipython download_files_v_1_0_1.py<<EOF
-no  # yes-allGNSS; no-NOTA
-yes  # yes-PBO; no-NOTA
+no
+yes
 EOF
+# yes-allGNSS; no-NOTA
+# yes-PBO; no-NOTA
 
 #step 2
 python preprocess_data_v_1_0_2.py
@@ -20,8 +22,9 @@ python ch_date_unr_v_1_0_2.py
 
 #step 4
 python time_vector_generator_v_1_0_1.py<<EOF
-no #Not specific end date of the analysis
+no
 EOF
+#Not specific end date of the analysis
 
 #step 5
 python remove_data_outside_analysis_period_v_1_0_2.py
