@@ -13,7 +13,7 @@ EOF
 # yes-PBO; no-NOTA
 
 #step 2
-python preprocess_data_v_1_0_2.py
+ipython preprocess_data_v_1_0_2.py
 
 
 #step 3
