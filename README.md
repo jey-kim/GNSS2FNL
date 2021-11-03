@@ -16,7 +16,7 @@ Nov 02, 2021
 >>    The element in the *th row of **`displacement_time_label.dat`** file is the month and year for a `*.fnl` file.
 
 
-*steps* \
+#### *steps* 
 \
 STEP01:download_files  (v.1.0.1) \
 STEP02:preprocess_data  (v.1.0.2) \
@@ -33,6 +33,6 @@ STEP11:vertical_timeseries_analysis  (v 0.0.0)
 > Update later (10/28/2021) 
 
 STEP12:diff  (v.1.0.0) \
-STEP13:fnl  (v.1.0.0) \
+STEP13:fnl  (v.1.0.0) 
 
-*DONE*
+#### *DONE*
