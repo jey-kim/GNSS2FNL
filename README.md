@@ -13,7 +13,7 @@ Nov 02, 2021
 >    Running process_GNSS2FNL.sh will download GNSS data, preprocess GNSS position time series measurements, and generate **`*.fnl`** files. \
 >    Each of the **`*.fnl`** files is a 4-month displacement field for a month. \
 >    To know the month and year of a displacement field (a `*.fnl` file), check the output file **`displacement_time_label.dat`** 
->>    The element in the *th row of **`displacement_time_label.dat`** file is the month and year for a `*.fnl` file.
+>>    The element in the ith row of **`displacement_time_label.dat`** file is the month and year for a `i.fnl` file.
 
 
 
