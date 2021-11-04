@@ -7,7 +7,7 @@ Nov 02, 2021
 ### The displacement fields are saved in `data/processing/*.fnl` 
 
 ### HOW TO USE this repository 
-
+- **`alias python=python3`**
 - Clone the entire repository: *git clone https://github.com/jey-kim/GNSS2FNL.git* 
 - Go to the cloned directory and run **`process_GNSS2FNL.sh`** *sh process_GNSS2FNL.sh* 
 >    Running process_GNSS2FNL.sh will download GNSS data, preprocess GNSS position time series measurements, and generate **`*.fnl`** files. \
