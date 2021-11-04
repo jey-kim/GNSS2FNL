@@ -7,6 +7,7 @@ Nov 02, 2021
 ### The displacement fields are saved in `data/processing/*.fnl` 
 
 ### HOW TO USE this repository 
+- Install ipython
 - **`alias python=python3`**
 - Clone the entire repository: *git clone https://github.com/jey-kim/GNSS2FNL.git* 
 - Go to the cloned directory and run **`process_GNSS2FNL.sh`** *sh process_GNSS2FNL.sh* 
