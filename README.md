@@ -39,3 +39,8 @@ STEP12:diff  (v.1.0.0) \
 STEP13:fnl  (v.1.0.0) 
 
 #### *DONE*
+
+
+
+**`process_GNSS2FNL.sh` works for AWS EC2 servers (Amazon Linux 2)** (tested 11.05.2021)
+**`process_GNSS2FNL.sh` also works for Mac OS X (Intel)** (tested 10.29.2021)
