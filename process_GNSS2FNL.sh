@@ -31,7 +31,7 @@ python remove_data_outside_analysis_period_v_1_0_2.py
 
 
 #step 6
-python correct_steps_v_1_0_1.py
+python correct_steps_v_1_0_2.py
 
 
 #step 7
@@ -43,7 +43,7 @@ python remove_outliers_v_1_0_0.py
 
 
 #step 9
-python plot_time_series_v_1_0_0.py
+python plot_time_series_v_1_0_1.py
 
 
 #step 10

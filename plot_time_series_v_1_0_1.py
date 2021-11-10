@@ -5,7 +5,7 @@
 
 # 
 # # Step **9** of **`G2FNL`**: <font color=blue>"plot_time_series.ipynb"</font>
-# #### Oct 18, 2021  <font color=red>(v. 1.0.0)</font>
+# #### Nov 10, 2021  <font color=red>(v. 1.0.1)</font>
 # ##### Jeonghyeop Kim (jeonghyeop.kim@gmail.com)
 # 
 # > input files: **`zeroFilled_i`**, **`outlierRemoved_i`**, **`timeCropped_i`**, **`station_list_full.dat`**, **`steps.txt`**, **`days_per_month.dat`**, and **`time_vector.dat`** \
@@ -40,6 +40,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.figure import figaspect
 from matplotlib import ticker
+import pandas.io.common
 
 
 # In[2]:
@@ -143,7 +144,12 @@ for i in range(N_list):
     list_earthquake=df_earthquake.tolist()
     
     file_uncorrected = 'timeCropped_'+str(i+1)
-    df_uncorrected=pd.read_csv(file_uncorrected, header=None, sep = ' ')
+    try:
+        df_uncorrected=pd.read_csv(file_uncorrected, header=None, sep = ' ')
+    except pandas.io.common.EmptyDataError:
+        file_uncorrected = 'zeroFilled_'+str(i+1)
+        df_uncorrected=pd.read_csv(file_uncorrected, header=None, sep = ' ')    
+
     df_uncorrected.columns = names
     df_uncorrected_filled=df_time.merge(df_uncorrected, on='date', how='left')
     # MERGE the two data frames based on 'date' column. 

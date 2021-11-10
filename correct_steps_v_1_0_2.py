@@ -5,7 +5,7 @@
 
 # 
 # # Step **6** of **`G2FNL`**: <font color=blue>"correct_steps.ipynb"</font>
-# #### Oct 2, 2021  <font color=red>(v. 1.0.1)</font> 
+# #### Nov 10, 2021  <font color=red>(v. 1.0.2)</font> 
 # ##### Jeonghyeop Kim (jeonghyeop.kim@gmail.com)
 # 
 # > input file(s)  : **`time_vector.dat`, `steps.txt` ,`station_list_full.dat` & `timeCropped_i`** \
@@ -33,6 +33,7 @@ import pandas as pd
 from datetime import datetime
 from ismember import ismember
 import os
+import pandas.io.common
 
 time_window_size = 4; 
 # 4-month moving time-window
@@ -209,7 +210,14 @@ for i in range(N_list): #range(N_list) later
     
 ## (a) Read input data 'timeCropped_i'
     target_data="timeCropped_"+str(i+1)
-    df_GPS=pd.read_csv(target_data, header=None, sep=' ')
+    try:
+        df_GPS=pd.read_csv(target_data, header=None, sep=' ')
+    except pandas.io.common.EmptyDataError:
+        save_array=np.array([[earliest_time,0,0,0,0,0,0,0,0,0,0]])
+        savefile = "stepCorrected_"+str(i+1) #output file = stepCorrected_"$i"
+        np.savetxt(savefile, save_array, fmt='%i')
+        continue
+        
     df_GPS.columns=['time','lon','lat','e','n','z','se','sn','sz','corr_en','flag']
     
     station=df_list.loc[i,['stID']].to_string(index=False)
