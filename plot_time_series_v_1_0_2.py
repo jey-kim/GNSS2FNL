@@ -5,7 +5,7 @@
 
 # 
 # # Step **9** of **`G2FNL`**: <font color=blue>"plot_time_series.ipynb"</font>
-# #### Nov 10, 2021  <font color=red>(v. 1.0.1)</font>
+# #### Nov 11, 2021  <font color=red>(v. 1.0.2)</font>
 # ##### Jeonghyeop Kim (jeonghyeop.kim@gmail.com)
 # 
 # > input files: **`zeroFilled_i`**, **`outlierRemoved_i`**, **`timeCropped_i`**, **`station_list_full.dat`**, **`steps.txt`**, **`days_per_month.dat`**, and **`time_vector.dat`** \
@@ -126,7 +126,7 @@ for N in range(len(df_days_per_month)):
 time_tick_index=time_tick_index[::3]
 
 
-# In[38]:
+# In[122]:
 
 
 names = ['date','lon','lat','ue','un','uz','se','sn','sz','corr','flag']
@@ -226,11 +226,44 @@ for i in range(N_list):
     eqINDEX = eqINDEX.tolist()
     eq_in_t = [t[c] for c in eqINDEX]    
     
+     
+    file_vel = "velocity_"+str(i+1)
+    df_model_vel=pd.read_csv(file_vel, header=None, sep = ' ')
+    
+    del_x=df_model_vel.iloc[0,0]
+    del_y=df_model_vel.iloc[1,0]
+    del_z=df_model_vel.iloc[2,0]
+    inct_x=df_model_vel.iloc[0,1]
+    inct_y=df_model_vel.iloc[1,1]
+    inct_z=df_model_vel.iloc[2,1]
 
+    t_for_model=df_no_outlier.index.values+1
+    min_non_nan=ue_outlier.apply(pd.Series.first_valid_index).values
+    min_non_nan=min_non_nan[0]
+    max_non_nan=ue_outlier.apply(pd.Series.last_valid_index).values
+    max_non_nan=max_non_nan[0]
+    t_for_model=t_for_model.astype(np.float32)
+    
+    if max_non_nan !=len(t_for_model) and min_non_nan!=0:
+        t_for_model[max_non_nan:-1]=np.nan
+        t_for_model[0:min_non_nan]=np.nan
+        
+    elif max_non_nan == len(t_for_model) and min_non_nan!=0:
+        t_for_model[0:min_non_nan]=np.nan
+        
+    elif max_non_nan !=len(t_for_model) and min_non_nan==0:
+        t_for_model[max_non_nan:-1]=np.nan
+        
+    ue_model=del_x*t_for_model+inct_x
+    un_model=del_y*t_for_model+inct_y
+    uz_model=del_z*t_for_model+inct_z
+    
 ################################
 ######        PLOT        ######
 ################################
-
+    
+    
+    
     w, h = figaspect(1/2.5)
     fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, sharex=True, figsize=(w,h))
 
@@ -257,6 +290,7 @@ for i in range(N_list):
     ax1.plot_date(t, ue_step, 'o', color='black', markerfacecolor='gray', markersize=2, markeredgewidth=0.1)
     ax1.plot(t, ue_outlier, 'o', color='black', markerfacecolor='red', markersize=2, markeredgewidth=0.1)
     ax1.plot(t, ue, 'o', color='black', markerfacecolor='blue', markersize=2, markeredgewidth=0.1)  
+    ax1.plot(t, ue_model,'-y',linewidth=5,alpha=0.6)
     ax1.grid(color='gray', linestyle='-', linewidth=0.01)
     ax1.yaxis.set_major_locator(yticks1)
 
@@ -264,6 +298,7 @@ for i in range(N_list):
     ax2.plot_date(t, un_step, 'o', color='black', markerfacecolor='gray', markersize=2, markeredgewidth=0.1)
     ax2.plot(t, un_outlier, 'o', color='black', markerfacecolor='red', markersize=2, markeredgewidth=0.1)
     ax2.plot(t, un, 'o', color='black', markerfacecolor='blue', markersize=2, markeredgewidth=0.1)
+    ax2.plot(t, un_model,'-y',linewidth=5,alpha=0.6)
     ax2.grid(color='gray', linestyle='-', linewidth=0.01)
     ax2.yaxis.set_major_locator(yticks2)
     
@@ -271,6 +306,7 @@ for i in range(N_list):
     ax3.plot_date(t, uz_step, 'o', color='black', markerfacecolor='gray', markersize=2, markeredgewidth=0.1)
     ax3.plot(t, uz_outlier, 'o', color='black', markerfacecolor='red', markersize=2, markeredgewidth=0.1)
     ax3.plot(t, uz, 'o', color='black', markerfacecolor='blue', markersize=2, markeredgewidth=0.1)
+    ax3.plot(t, uz_model,'-y',linewidth=5,alpha=0.6)
     ax3.grid(color='gray', linestyle='-', linewidth=0.01)
     ax3.yaxis.set_major_locator(yticks3)
     
@@ -294,12 +330,6 @@ for i in range(N_list):
     ax3.set_xticks(ticks1)
     fig.savefig('plot_timeseries_'+str(i+1)+'.pdf',bbox_inches='tight')
     plt.close(fig)
-
-
-# In[27]:
-
-
-
 
 
 # In[ ]:

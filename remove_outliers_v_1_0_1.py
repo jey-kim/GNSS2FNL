@@ -5,7 +5,7 @@
 
 # 
 # # Step **8** of **`G2FNL`**: <font color=blue>"remove_outliers.ipynb"</font>
-# #### Oct 19, 2021  <font color=red>(v. 1.0.0)</font>
+# #### Nov 11, 2021  <font color=red>(v. 1.0.1)</font>
 # ##### Jeonghyeop Kim (jeonghyeop.kim@gmail.com)
 # 
 # > input files: **`zeroFilled_i`**, **`days_per_month.dat`**, **`station_list_full.dat`**,  **`steps.txt`**, and **`time_vector.dat`** \
@@ -296,19 +296,100 @@ for i in range(N_list):
                 if turnoff_print !=1:
                     print("no outlier(s) for the month %s for station %s : Skip this month" %(str(f"{j:03}"),stationID))
     
-    df_save = df_input[['date','lon','lat','ue','un','uz','se','sn','sz','corr_en','flag']]
+    df_save = df_input[['datenum','date','lon','lat','ue','un','uz','se','sn','sz','corr_en','flag']]
     df_save = df_save.reset_index(drop=True)
     
     
-    # FINALLY REMOVE all data with se > 10 or sn > 10 or sz > 20
+    # REMOVE all data with se > 10 or sn > 10 or sz > 20
     idx_big_error=df_save[(df_save['se']>=10) | (df_save['sn']>=10) | (df_save['sz']>=20)].index.values
     idx_big_error=idx_big_error.tolist()
-    if len(idx_big_error)!=0:
-        #if len(idx_big_error)==1:        
+    if len(idx_big_error)!=0:      
         df_save.loc[idx_big_error,['lon','lat','ue','un','uz','se','sn','sz','corr_en','flag']]=0
-        #print(i)
+
+        
+    df_save_timeseries = df_save[['date','lon','lat','ue','un','uz','se','sn','sz','corr_en','flag']]
+    df_save_timeseries = df_save_timeseries.reset_index(drop=True)
     outputfile = "outlierRemoved_"+str(i+1) #output_file = outlierRemoved_"$i"
-    df_save.to_csv(outputfile ,header=None, index=None ,float_format='%.6f', sep=' ')
+    df_save_timeseries.to_csv(outputfile ,header=None, index=None ,float_format='%.6f', sep=' ')
+
+    # FIT a line for the entire time span for velocity. 
+    
+    df_nonzero = df_save[(df_save['lon']!=0) & (df_save['lat']!=0)]
+    df_nonzero = df_nonzero.reset_index(drop=True)  
+    
+    t = df_nonzero.loc[:,['datenum']]
+    ux = df_nonzero.loc[:,['ue']]
+    uy = df_nonzero.loc[:,['un']]
+    uz = df_nonzero.loc[:,['uz']]
+    sx = df_nonzero.loc[:,['se']]
+    sy = df_nonzero.loc[:,['sn']]
+    sz = df_nonzero.loc[:,['sz']]
+            
+
+    # Build G-matrix for a line
+    G_matrix = t
+    G_matrix['cont']=np.ones((len(t),1))
+            
+    # Build diagonal weighting matrice for the three components
+    sx_inv = 1/sx
+    sx_inv = sx_inv.to_numpy()  
+    wx = np.diag(sx_inv[:,0])
+    wx = pd.DataFrame(wx)
+            
+    sy_inv = 1/sy
+    sy_inv = sy_inv.to_numpy()  
+    wy = np.diag(sy_inv[:,0])
+    wy = pd.DataFrame(wy)
+            
+    sz_inv = 1/sz
+    sz_inv = sz_inv.to_numpy()  
+    wz = np.diag(sz_inv[:,0])
+    wz = pd.DataFrame(wz)
+            
+    # Wd, WG
+    x = wx @ ux
+    y = wy @ uy
+    z = wz @ uz
+    Gx = wx @ G_matrix
+    Gy = wy @ G_matrix
+    Gz = wz @ G_matrix
+            
+            
+    # Inversion (LSM)           
+    # G'
+    GxT = Gx.transpose()
+    GyT = Gy.transpose()
+    GzT = Gz.transpose()
+    # G'G
+    GpG_x=GxT @ Gx
+    GpG_y=GyT @ Gy
+    GpG_z=GzT @ Gz
+    # inv(G'G)
+    try:
+        GpG_x_inv= pd.DataFrame(np.linalg.inv(GpG_x.to_numpy()), GpG_x.columns, GpG_x.index)
+        GpG_y_inv= pd.DataFrame(np.linalg.inv(GpG_y.to_numpy()), GpG_y.columns, GpG_y.index)
+        GpG_z_inv= pd.DataFrame(np.linalg.inv(GpG_z.to_numpy()), GpG_z.columns, GpG_z.index)
+    except: 
+        GpG_x_inv= pd.DataFrame(np.linalg.pinv(GpG_x.to_numpy()), GpG_x.columns, GpG_x.index)
+        GpG_y_inv= pd.DataFrame(np.linalg.pinv(GpG_y.to_numpy()), GpG_y.columns, GpG_y.index)
+        GpG_z_inv= pd.DataFrame(np.linalg.pinv(GpG_z.to_numpy()), GpG_z.columns, GpG_z.index)        
+    
+    # mL2 = inv(G'G)G'd
+    model_x = GpG_x_inv @ GxT @ x
+    model_y = GpG_y_inv @ GyT @ y
+    model_z = GpG_z_inv @ GzT @ z
+    
+#    vel = [model_x[0],model_y[0],model_z[0]]
+    
+    frame_model=[model_x, model_y, model_z]
+    df_model = pd.concat(frame_model, ignore_index=True, axis=1)
+    df_model.reset_index(drop=True)
+    df_model.columns=['x','y','z']
+    df_model.index=['vel (mm/day)','intercept (mm)']
+    df_model = df_model.transpose()
+    velfile = "velocity_"+str(i+1)
+    df_model.to_csv(velfile ,header=None, index=None ,float_format='%.6f', sep=' ')
+    
 
 
 # In[ ]:

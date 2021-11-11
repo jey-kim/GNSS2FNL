@@ -39,11 +39,11 @@ python fill_entire_time_v_1_0_0.py
 
 
 #step 8
-python remove_outliers_v_1_0_0.py
+python remove_outliers_v_1_0_1.py
 
 
 #step 9
-python plot_time_series_v_1_0_1.py
+python plot_time_series_v_1_0_2.py
 
 
 #step 10
