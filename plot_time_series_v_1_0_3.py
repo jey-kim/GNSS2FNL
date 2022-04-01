@@ -1,36 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# <img src="Figs/GEOS_Logo.pdf" width="500" />
-
-# 
-# # Step **9** of **`G2FNL`**: <font color=blue>"plot_time_series.ipynb"</font>
-# #### Nov 11, 2021  <font color=red>(v. 1.0.2)</font>
-# ##### Jeonghyeop Kim (jeonghyeop.kim@gmail.com)
-# 
-# > input files: **`zeroFilled_i`**, **`outlierRemoved_i`**, **`timeCropped_i`**, **`station_list_full.dat`**, **`steps.txt`**, **`days_per_month.dat`**, and **`time_vector.dat`** \
-# > output files: **`timeseries_i.pdf`** 
-# 
-# #### <font color=red>UNIT in `outlierRemoved_i` is [mm], while any `other input files` have a unit of [m] </font>
-# 
-# 
-# 0. This code is a part of GPS2FNL process 
-# 1. It will plot three different time series for each station:
-# - time series uncorrected (timeCropped_i)
-# - time series step corrected (zeroFilled_i)
-# - time series outlier removed (outlierRemoved_i)
-# 2. Each of the three different time series has three components (east-west, north-south, and up-down)
-# 3. Investigate each *.pdf outfiles to make sure correcting and removing outlier steps work properly. 
-# 4. This code will plot vertical `pink solid` lines for the equipment-related steps.
-# 5. This code will plot vertical `gray dashed` lines for the earthquake-related steps.
-
-# <div class="alert alert-danger">
-# Do NOT run this code twice without re-starting the kernel
-# </div>
-
-# In[1]:
-
-
 # 1. import modules
 import numpy as np
 import pandas as pd
@@ -43,14 +13,8 @@ from matplotlib import ticker
 import pandas.io.common
 
 
-# In[2]:
-
-
 current_dir=os.getcwd()
 os.getcwd()
-
-
-# In[3]:
 
 
 
@@ -101,18 +65,9 @@ df_days_per_month = pd.read_csv(days_per_month, header=None)
 df_days_per_month.columns = ['days']
 
 
-# In[4]:
-
-
 processing_dir = os.path.join(current_dir, 'data', 'processing')
 os.chdir(processing_dir) # cp to processing directory
 os.getcwd()
-
-
-# >
-# **`For the better time axis ticks, pick the first day of each month`**
-
-# In[5]:
 
 
 df_days_per_month = df_days_per_month.to_numpy()[:,0]
@@ -124,9 +79,6 @@ for N in range(len(df_days_per_month)):
     time_tick_index.append(start)
     
 time_tick_index=time_tick_index[::3]
-
-
-# In[122]:
 
 
 names = ['date','lon','lat','ue','un','uz','se','sn','sz','corr','flag']
@@ -287,26 +239,26 @@ for i in range(N_list):
     yticks3 = ticker.MaxNLocator(M) 
     
     
-    ax1.plot_date(t, ue_step, 'o', color='black', markerfacecolor='gray', markersize=2, markeredgewidth=0.1)
-    ax1.plot(t, ue_outlier, 'o', color='black', markerfacecolor='red', markersize=2, markeredgewidth=0.1)
-    ax1.plot(t, ue, 'o', color='black', markerfacecolor='blue', markersize=2, markeredgewidth=0.1)  
-    ax1.plot(t, ue_model,'-y',linewidth=5,alpha=0.6)
+    ax1.plot_date(t, ue_step.values, 'o', color='black', markerfacecolor='gray', markersize=2, markeredgewidth=0.1)
+    ax1.plot(t, ue_outlier.values, 'o', color='black', markerfacecolor='red', markersize=2, markeredgewidth=0.1)
+    ax1.plot(t, ue.values, 'o', color='black', markerfacecolor='blue', markersize=2, markeredgewidth=0.1)  
+#    ax1.plot(t, ue_model,'-y',linewidth=5,alpha=0.6)
     ax1.grid(color='gray', linestyle='-', linewidth=0.01)
     ax1.yaxis.set_major_locator(yticks1)
 
     
-    ax2.plot_date(t, un_step, 'o', color='black', markerfacecolor='gray', markersize=2, markeredgewidth=0.1)
-    ax2.plot(t, un_outlier, 'o', color='black', markerfacecolor='red', markersize=2, markeredgewidth=0.1)
-    ax2.plot(t, un, 'o', color='black', markerfacecolor='blue', markersize=2, markeredgewidth=0.1)
-    ax2.plot(t, un_model,'-y',linewidth=5,alpha=0.6)
+    ax2.plot_date(t, un_step.values, 'o', color='black', markerfacecolor='gray', markersize=2, markeredgewidth=0.1)
+    ax2.plot(t, un_outlier.values, 'o', color='black', markerfacecolor='red', markersize=2, markeredgewidth=0.1)
+    ax2.plot(t, un.values, 'o', color='black', markerfacecolor='blue', markersize=2, markeredgewidth=0.1)
+#    ax2.plot(t, un_model,'-y',linewidth=5,alpha=0.6)
     ax2.grid(color='gray', linestyle='-', linewidth=0.01)
     ax2.yaxis.set_major_locator(yticks2)
     
     
-    ax3.plot_date(t, uz_step, 'o', color='black', markerfacecolor='gray', markersize=2, markeredgewidth=0.1)
-    ax3.plot(t, uz_outlier, 'o', color='black', markerfacecolor='red', markersize=2, markeredgewidth=0.1)
-    ax3.plot(t, uz, 'o', color='black', markerfacecolor='blue', markersize=2, markeredgewidth=0.1)
-    ax3.plot(t, uz_model,'-y',linewidth=5,alpha=0.6)
+    ax3.plot_date(t, uz_step.values, 'o', color='black', markerfacecolor='gray', markersize=2, markeredgewidth=0.1)
+    ax3.plot(t, uz_outlier.values, 'o', color='black', markerfacecolor='red', markersize=2, markeredgewidth=0.1)
+    ax3.plot(t, uz.values, 'o', color='black', markerfacecolor='blue', markersize=2, markeredgewidth=0.1)
+#    ax3.plot(t, uz_model,'-y',linewidth=5,alpha=0.6)
     ax3.grid(color='gray', linestyle='-', linewidth=0.01)
     ax3.yaxis.set_major_locator(yticks3)
     
@@ -330,9 +282,6 @@ for i in range(N_list):
     ax3.set_xticks(ticks1)
     fig.savefig('plot_timeseries_'+str(i+1)+'.pdf',bbox_inches='tight')
     plt.close(fig)
-
-
-# In[ ]:
 
 
 
