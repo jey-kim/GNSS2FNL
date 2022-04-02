@@ -1,7 +1,7 @@
 # GNSS2FNL [From GNSS position timeseries measurements to 4-mo displacement field]
 
 `jeonghyeop Kim` (jeonghyeop.kim@gmail.com) \
-Nov 02, 2021
+APR 01, 2022
 
 ## These codes download and preprocess GNSS position timeseries data to generate 4-month displacement fields.
 ### The displacement fields are saved in `data/processing/*.fnl` 
@@ -26,10 +26,10 @@ STEP02:preprocess_data  (v.1.0.2) \
 STEP03:ch_date_unr  (v.1.0.2) \
 STEP04:time_vector_generator  (v.1.0.1) \
 STEP05:remove_data_outside_analysis_period  (v.1.0.2) \
-STEP06:correct_steps  (v.1.0.2) \
+STEP06:correct_steps  (v.1.0.3) \
 STEP07:fill_entire_time  (v.1.0.0) \
 STEP08:remove_outliers  (v.1.0.1) \
-STEP09:plot_time_series  (v.1.0.2) \
+STEP09:plot_time_series  (v.1.0.3) \
 STEP10:monthly_avg  (v.1.0.1) \
 STEP11:vertical_timeseries_analysis  (v 0.0.0) 
 > Use the previous analysis for now (vertical_analysis_PBO.out) \
@@ -44,3 +44,4 @@ STEP13:fnl  (v.1.0.0)
 
 **`process_GNSS2FNL.sh` works for AWS EC2 servers (Amazon Linux 2)** (tested 11.05.2021)
 **`process_GNSS2FNL.sh` also works for Mac OS X (Intel)** (tested 11.03.2021)
+** 
