@@ -473,7 +473,7 @@ for i in range(N_list): #range(N_list) later
                     date_time_window_size_after=ismember(Time_window_size_after,data_datenum)
                     idx_time_window_size_after = [x for x in date_time_window_size_after if x == x]
                     df_GPS=df_GPS.drop(idx_time_window_size_after) #drop the data. #make sure later you need to reset the index of DF!
-                    
+                    df_GPS=df_GPS.reset_index(drop=True)
                 else:
                     print("              >>>>>>A linear fitting will be performed")
                     # Linear fit will be performed.      
